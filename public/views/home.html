@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../css/home.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fybrrStore</title>
+
+</head>
+
+<body>
+    <h1 class="name-header">fybrrStore</h1>
+
+    <a href="../api/user/logout" class="sign-out">
+        <span>Sign Out &nbsp;</span>
+        <i class="fas fa-sign-out"></i>
+    </a>
+
+    <!-- <input type="file" name="file" id="file">
+    <button id="upload" onclick="upload()">Upload</button> -->
+    <div class="col">
+        <!-- method 1 - sizing classes -->
+        <div class="list-head list-group d-flex flex-row flex-wrap">
+            <p class="list-group-item w-50 ">
+                File
+            </p>
+            <p class="list-group-item w-25 ">
+                Size
+            </p>
+            <p class="list-group-item w-25 ">
+                Action
+            </p>
+        </div>
+        <ul class="list" id="aList">
+            <div class="list-group d-flex flex-row flex-wrap">
+
+                <p class="list-group-item w-50 file-name" id="file-name">
+                    <span style="color: #186ef7;"><i class="fas fa-folder"></i></span>&nbsp;Folder 1
+                </p>
+                <p class="list-group-item w-25 file-size" id="file-size">
+                    0
+                </p>
+                <p class="list-group-item w-25 file-link" id="file-link">
+                    <span style="color: #186ef7;"><i class="fa-solid fa-arrow-right"></i></span>
+                </p>
+            </div>
+        </ul>
+    </div>
+    <template data-template="folderlist">
+        <div class="list-group d-flex flex-row flex-wrap">
+            <p class="list-group-item w-50 file-name" id="file-name">
+                <span style="color: #186ef7;"><i class="fas fa-folder"></i></span>&nbsp;Folder 1
+            </p>
+            <p class="list-group-item w-25 file-size" id="file-size">
+                0
+            </p>
+            <p class="list-group-item w-25 file-link" id="file-link">
+                <span style="color: #186ef7;"><i class="fa-solid fa-arrow-right"></i></span>
+            </p>
+        </div>
+    </template>
+    <template data-template="filelist">
+        <div class="list-group d-flex flex-row flex-wrap">
+            <p class="list-group-item w-50 file-name" id="file-name">
+                
+            </p>
+            <p class="list-group-item w-25 file-size" id="file-size">
+                
+            </p>
+            <p class="list-group-item w-25 file-link" id="file-link">
+                <a href="" id="filelink" target="_blank">
+                    <i class="fas fa-link" id="linkToFile" style="cursor: pointer;"></i>
+                </a>
+                /
+                
+                    <i class="fas fa-download" id="downloadFile" style="cursor: pointer; color: #1266f1;"></i>
+                
+            </p>
+        </div>
+    </template>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3" onsubmit="return false">
+                        <input type="file" name="file" id="file">
+
+                        <div class="col-md-12">
+                            <button type="submit" onclick="upload()" class="btn btn-primary">Upload</button>
+                            <div id="loading-bar-spinner" class="spinner">
+                                <div class="spinner-icon"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create New Folder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Folder Name</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary" onclick="createFolder()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="fab-container">
+        <div class="fab shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="fab-content">
+                <span class="material-icons">library_add</span>
+            </div>
+        </div>
+    </div> -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> -->
+
+    <div>
+        <div class="floating-container">
+            <div class="shadow floating-button">+</div>
+            <div class="element-container">
+                <span class="float-element" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="material-icons">folder</i>
+                </span>
+                <span class="float-element" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                    <i class=" material-icons ">library_add</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/uuidv4@6.2.13/build/lib/uuidv4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js " integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN " crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js " integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin=" anonymous " referrerpolicy="no-referrer "></script>
+    <script src="/dist/bundle.js "></script>
+    <script src="../js/home.js "></script>
+</body>
+
+</html>
