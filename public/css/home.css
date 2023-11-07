@@ -5,6 +5,7 @@ html {
 body {
     font-family: 'Outfit', sans-serif;
     font-size: 1.2rem;
+    overflow-y: hidden !important;
 }
 
 h1 {
@@ -382,4 +383,9 @@ body {
 .floating-container .float-element:nth-child(3) {
     background: #FF9800;
     box-shadow: 0 20px 20px -10px rgba(255, 152, 0, 0.5);
+}
+
+#aList {
+    max-height: 70vh;
+    overflow-y: scroll;
 }

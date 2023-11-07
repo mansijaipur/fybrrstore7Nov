@@ -15,9 +15,9 @@ window.onload = function() {
             const clone = template.content.cloneNode(true);
             clone.querySelector('.file-name').innerHTML = file.name;
             clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
-            clone.querySelector('#filelink').href = `https://ipfs.io/ipfs/${file.cid}`;
+            clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
             clone.querySelector('#downloadFile').addEventListener('click', () => {
-                forceDown(`https://ipfs.io/ipfs/${file.cid}`, file.name);
+                forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
             });
             document.querySelector('#aList').appendChild(clone);
         });
@@ -67,5 +67,14 @@ async function upload() {
 }
 
 function createFolder() {
+    const folderName = document.querySelector('.folder-name').value;
+    // create uuid for folder
+    const uuid = uuidv4();
+    console.log(uuid, folderName);
 
+    const template = document.querySelector('template[data-template="folderlist"]');
+    const clone = template.content.cloneNode(true);
+    clone.querySelector('.fold-name').innerHTML = folderName;
+    clone.querySelector('.fold-size').innerHTML = '0';
+    document.querySelector('#aList').appendChild(clone);
 }

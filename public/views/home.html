@@ -42,7 +42,7 @@
             </p>
         </div>
         <ul class="list" id="aList">
-            <div class="list-group d-flex flex-row flex-wrap">
+            <!-- <div class="list-group d-flex flex-row flex-wrap">
 
                 <p class="list-group-item w-50 file-name" id="file-name">
                     <span style="color: #186ef7;"><i class="fas fa-folder"></i></span>&nbsp;Folder 1
@@ -51,21 +51,21 @@
                     0
                 </p>
                 <p class="list-group-item w-25 file-link" id="file-link">
-                    <span style="color: #186ef7;"><i class="fa-solid fa-arrow-right"></i></span>
+                    <span style="color: #186ef7;"><i class="fa-solid fa-caret-down"></i></span>
                 </p>
-            </div>
+            </div> -->
         </ul>
     </div>
     <template data-template="folderlist">
         <div class="list-group d-flex flex-row flex-wrap">
             <p class="list-group-item w-50 file-name" id="file-name">
-                <span style="color: #186ef7;"><i class="fas fa-folder"></i></span>&nbsp;Folder 1
+                <span style="color: #186ef7;"><i class="fas fa-folder"></i></span>&nbsp;<span class="fold-name">Folder 1</span>
             </p>
-            <p class="list-group-item w-25 file-size" id="file-size">
+            <p class="list-group-item w-25 fold-size">
                 0
             </p>
-            <p class="list-group-item w-25 file-link" id="file-link">
-                <span style="color: #186ef7;"><i class="fa-solid fa-arrow-right"></i></span>
+            <p class="list-group-item w-25 file-link">
+                <span style="color: #186ef7;"><i class="fa-solid fa-list-dropdown"></i></span>
             </p>
         </div>
     </template>
@@ -123,32 +123,19 @@
                     <form>
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Folder Name</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control folder-name" id="recipient-name">
                         </div>
-                        <!-- <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div> -->
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
                     <button type="button" class="btn btn-primary" onclick="createFolder()">Create</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- <div class="fab-container">
-        <div class="fab shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <div class="fab-content">
-                <span class="material-icons">library_add</span>
-            </div>
-        </div>
-    </div> -->
-    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> -->
 
-    <div>
+    <!-- <div>
         <div class="floating-container">
             <div class="shadow floating-button">+</div>
             <div class="element-container">
@@ -160,8 +147,18 @@
                 </span>
             </div>
         </div>
+    </div> -->
+
+    <div class="fab-container">
+        <div class="fab shadow" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+            <div class="fab-content">
+                <span class="material-icons">library_add</span>
+            </div>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/uuidv4@6.2.13/build/lib/uuidv4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js" integrity="sha512-BCMqEPl2dokU3T/EFba7jrfL4FxgY6ryUh4rRC9feZw4yWUslZ3Uf/lPZ5/5UlEjn4prlQTRfIPYQkDrLCZJXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/uuidv4@6.2.13/build/lib/uuidv4.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js " integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN " crossorigin="anonymous "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js " integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin=" anonymous " referrerpolicy="no-referrer "></script>
     <script src="/dist/bundle.js "></script>
