@@ -64,6 +64,22 @@ app.post('/api/user/newfile', auth, async(req, res) => {
     }
 });
 
+app.post('/api/user/newfolder', auth, async(req, res) => {
+    if (!req.isAuth) {
+        res.redirect('/login');
+        return;
+    }
+    // const fname = req.body.folderName;
+    // const folobj = [{ folname: req.body.folderName }, { uuid: req.body.uuid }, { "kind": "folder" }]
+    try {
+        const user = await User.findOneAndUpdate({ name: req.user.name }, { $push: { files: { Fname: req.body.folderName, Fuuid: req.body.uuid, Ffiles: [] } } });
+        console.log("folder created")
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/public/views/login2.html');
 
@@ -88,6 +104,24 @@ app.get('/', auth, (req, res) => {
     }
     res.redirect('/' + req.user.name);
 });
+
+app.get('/folder/:name', auth, (req, res) => {
+    console.log("came to backend")
+    if (!req.isAuth) {
+        res.redirect('/login');
+        return;
+    }
+    res.sendFile(__dirname + '/public/views/folder.html');
+});
+
+// app.get('/folder', auth, (req, res) => {
+//     if (!req.isAuth) {
+//         res.redirect('/login');
+//         return;
+//     }
+//     res.sendFile(__dirname + '/public/views/folder.html');
+//     res.redirect('/folder/' + req.params.name);
+// })
 
 server.listen(PORT, () => {
     console.log(`Express app listening to PORT ${PORT}`);

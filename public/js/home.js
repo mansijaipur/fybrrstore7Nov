@@ -11,15 +11,41 @@ window.onload = function() {
             return b.lastModified - a.lastModified;
         });
         files.forEach(file => {
-            const template = document.querySelector('template[data-template="filelist"]');
-            const clone = template.content.cloneNode(true);
-            clone.querySelector('.file-name').innerHTML = file.name;
-            clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
-            clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
-            clone.querySelector('#downloadFile').addEventListener('click', () => {
-                forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
-            });
-            document.querySelector('#aList').appendChild(clone);
+
+            if (!file.Fname) {
+                const template = document.querySelector('template[data-template="filelist"]');
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.file-name').innerHTML = file.name;
+                clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
+                clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
+                clone.querySelector('#downloadFile').addEventListener('click', () => {
+                    forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
+                });
+                document.querySelector('#aList').appendChild(clone);
+            } else {
+                const template = document.querySelector('template[data-template="folderlist"]');
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.fold-name').innerHTML = file.Fname;
+                clone.querySelector('.fold-link').dataset.folder = file.Fname;
+                // clone.querySelector('fold-size').innerHTML = 0;
+                document.querySelector('#aList').appendChild(clone);
+            }
+        });
+        const fold = document.querySelectorAll('.fold-link');
+        fold.forEach(eachfolder => {
+            eachfolder.addEventListener('click', (arrow) => {
+                const name = eachfolder.dataset.folder;
+                console.log(eachfolder.dataset.folder);
+                // api to open folder
+                window.location = location.protocol + '//' + location.host + '/folder/' + name;
+                // axios({
+                //     method: 'get',
+                //     // params: { 'name': name },
+                //     url: location.protocol + '//' + location.host + '/folder' + name,
+                // }).then((res) => {
+                //     console.log('Folder opened');
+                // })
+            })
         });
     })
 }
@@ -50,7 +76,9 @@ function convertToReadable(size) {
 
 async function upload() {
     document.querySelector('.spinner').style.display = 'inline-block';
-    let fileObject = await fstore.sendFilesToWeb3Storage();
+    let fileObject = await fstore.sendFilesToWeb3Storage(); // fileObject = {cid: "", name: ""...}
+
+
     console.log(fileObject);
     axios({
         method: 'post',
@@ -67,14 +95,36 @@ async function upload() {
 }
 
 function createFolder() {
+    console.log("Creating folder")
     const folderName = document.querySelector('.folder-name').value;
     // create uuid for folder
+    if (!folderName.trim()) {
+        // If folderName is empty or contains only whitespace
+        alert('Folder name cannot be empty. Please enter a valid folder name.');
+    } else {
+        // Folder name is not empty, you can proceed with your logic here
+        // For example, you might want to perform some actions with the non-empty folderName
+        console.log('Folder name:', folderName);
+    }
+
     const uuid = uuidv4();
     console.log(uuid, folderName);
 
-    const template = document.querySelector('template[data-template="folderlist"]');
-    const clone = template.content.cloneNode(true);
-    clone.querySelector('.fold-name').innerHTML = folderName;
-    clone.querySelector('.fold-size').innerHTML = '0';
-    document.querySelector('#aList').appendChild(clone);
+    axios({
+        method: "post",
+        url: location.protocol + '//' + location.host + '/api/user/newfolder',
+        data: { folderName, uuid }
+    }).then(() => {
+        document.querySelector('.btn-close').click();
+        // reload page
+        window.location.reload();
+    })
 }
+
+// function openFolder() {
+//     const template = document.querySelector('template[data-template="folderlist"]');
+//     const clone = template.content.cloneNode(true);
+//     // const datafolder = clone.querySelector('.fold-link');
+//     // console.log(datafolder.dataset);
+
+// }

@@ -18,6 +18,9 @@ function makeStorageClient() {
 
 async function getFiles(path) {
     const fileInput = document.querySelector('input[type="file"]')
+    if (!fileInput) {
+        alert('Select a file to upload!');
+    }
     console.log(fileInput.files);
     return fileInput.files
 }
@@ -48,7 +51,8 @@ export async function sendFilesToWeb3Storage() {
     fileObject.name = files[0].name;
     fileObject.size = files[0].size;
     fileObject.type = files[0].type;
-    fileObject.lastModified = files[0].lastModified;
+    fileObject.folder =
+        fileObject.lastModified = files[0].lastModified;
     return fileObject;
 }
 

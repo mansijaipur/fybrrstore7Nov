@@ -1,24 +1,49 @@
-	// get all folders in our .directory-list
-	var allFolders = $(".directory-list li > ul");
-	allFolders.each(function() {
+const foldername = window.location.pathname.substring(8);
+document.querySelector('.addfile').dataset.folderbtn = foldername;
 
-	    // add the folder class to the parent <li>
-	    var folderAndName = $(this).parent();
-	    folderAndName.addClass("folder");
+window.onload = function() {
+    axios({
+        method: 'get',
+        url: location.protocol + '//' + location.host + '/api/user/data',
+    }).then((res) => {
+        console.log(res.data);
+        document.querySelector('.folder-name').innerHTML = foldername;
+        files = res.data.files;
+        // sort in descending order of last modified
+        files.sort((a, b) => {
+            return b.lastModified - a.lastModified;
+        });
+        files.forEach(file => {
 
-	    // backup this inner <ul>
-	    var backupOfThisFolder = $(this);
-	    // then delete it
-	    $(this).remove();
-	    // add an <a> tag to whats left ie. the folder name
-	    folderAndName.wrapInner("<a href='#' />");
-	    // then put the inner <ul> back
-	    folderAndName.append(backupOfThisFolder);
-
-	    // now add a slideToggle to the <a> we just added
-	    folderAndName.find("a").click(function(e) {
-	        $(this).siblings("ul").slideToggle("slow");
-	        e.preventDefault();
-	    });
-
-	});
+            if (file.Fname === foldername) {
+                const fileArr = file.Ffiles;
+                console.log("came to folder subtree" + fileArr)
+                fileArr.forEach(file => {
+                    const template = document.querySelector('template[data-template="filelist"]');
+                    const clone = template.content.cloneNode(true);
+                    clone.querySelector('.file-name').innerHTML = file.name;
+                    clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
+                    clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
+                    clone.querySelector('#downloadFile').addEventListener('click', () => {
+                        forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
+                    });
+                    document.querySelector('#aList').appendChild(clone);
+                })
+            }
+        });
+        const addbtn = document.querySelector('.addfile');
+        addbtn.addEventListener('click', (add) => {
+            const name = addbtn.dataset.folderbtn;
+            console.log(addbtn.dataset.folderbtn);
+            // api to open folder
+            // window.location = location.protocol + '//' + location.host + '/folder/' + name;
+            // axios({
+            //     method: 'get',
+            //     // params: { 'name': name },
+            //     url: location.protocol + '//' + location.host + '/folder' + name,
+            // }).then((res) => {
+            //     console.log('Folder opened');
+            // })
+        })
+    })
+}
