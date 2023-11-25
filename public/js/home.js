@@ -97,6 +97,16 @@ async function upload() {
 function createFolder() {
     console.log("Creating folder")
     const folderName = document.querySelector('.folder-name').value;
+    
+    if (!folderName.trim()) {
+        // If folderName is empty or contains only whitespace
+        alert('Folder name cannot be empty. Please enter a valid folder name.');
+    } else {
+        // Folder name is not empty, you can proceed with your logic here
+        // For example, you might want to perform some actions with the non-empty folderName
+        console.log('Folder name:', folderName);
+    }
+    
     // create uuid for folder
     if (!folderName.trim()) {
         // If folderName is empty or contains only whitespace

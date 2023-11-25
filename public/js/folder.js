@@ -2,6 +2,7 @@ const folderuuid = window.location.pathname.substring(8);
 document.querySelector('.addfile').dataset.folderbtn = folderuuid;
 const queue = new Queue();
 
+
 window.onload = function() {
     axios({
         method: 'get',
@@ -15,27 +16,73 @@ window.onload = function() {
             return b.lastModified - a.lastModified;
         });
         files.forEach(file => {
+            queue.enqueue(file);
+        });
 
-            if (file.Fuuid === folderuuid) {
-                const fileArr = file.Ffiles;
-                console.log("came to folder subtree" + fileArr)
-                fileArr.forEach(file => {
-                    const template = document.querySelector('template[data-template="filelist"]');
-                    const clone = template.content.cloneNode(true);
-                    clone.querySelector('.file-name').innerHTML = file.name;
-                    clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
-                    clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
-                    clone.querySelector('#downloadFile').addEventListener('click', () => {
-                        forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
-                    });
-                    document.querySelector('#aList').appendChild(clone);
-                })
+        let folderobj;
+        while(queue.size() != 0){
+            const obj = queue.peek();
+            if(obj.type === 'folder'){
+                if(obj.Fuuid === folderuuid){
+                    folderobj = obj;
+                    queue.clear();
+                    break;
+                }
+                obj.Ffiles.forEach(ele => {
+                    queue.enqueue(ele);
+                });
+            }
+        }
+        document.querySelector('.folder-name').innerHTML = folderobj.Fname;
+
+        folderobj.Ffiles.forEach(file => {
+
+            if (!file.Fname) {
+                const template = document.querySelector('template[data-template="filelist"]');
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.file-name').innerHTML = file.name;
+                clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
+                clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
+                clone.querySelector('#downloadFile').addEventListener('click', () => {
+                    forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
+                });
+                document.querySelector('#aList').appendChild(clone);
+            } else {
+                const template = document.querySelector('template[data-template="folderlist"]');
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.fold-name').innerHTML = file.Fname;
+                clone.querySelector('.fold-link').dataset.folder = file.Fuuid;
+                // clone.querySelector('fold-size').innerHTML = 0;
+                document.querySelector('#aList').appendChild(clone);
             }
         });
+
+
+
+        const fold = document.querySelectorAll('.fold-link');
+        fold.forEach(eachfolder => {
+            eachfolder.addEventListener('click', (arrow) => {
+                const uuid = eachfolder.dataset.folder;
+                console.log('folder ' + uuid);
+                
+                // api to open folder
+                window.location = location.protocol + '//' + location.host + '/folder/' + uuid;
+                // axios({
+                //     method: 'get',
+                //     // params: { 'name': name },
+                //     url: location.protocol + '//' + location.host + '/folder' + name,
+                // }).then((res) => {
+                //     console.log('Folder opened');
+                // })
+            })
+        });
+
         const addbtn = document.querySelector('.addfile');
         addbtn.addEventListener('click', (add) => {
             const uuid = addbtn.dataset.folderbtn;
             console.log('folder ' + uuid);
+            console.log(folderobj);
+
 
             // api to open folder
             // window.location = location.protocol + '//' + location.host + '/folder/' + name;

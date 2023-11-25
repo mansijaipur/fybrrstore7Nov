@@ -1,4 +1,5 @@
 import { Web3Storage, getFilesFromPath, File } from 'web3.storage';
+import { SingleEntryPlugin } from 'webpack';
 
 // import dotenv 
 // import dotenv from 'dotenv';
@@ -62,6 +63,7 @@ async function storeFiles(files) {
     console.log('stored files with cid:', cid)
     return cid
 }
+
 
 async function storeWithProgress(files) {
     // show the root cid as soon as it's ready
