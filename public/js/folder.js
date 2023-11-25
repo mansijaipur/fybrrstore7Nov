@@ -1,5 +1,6 @@
 const foldername = window.location.pathname.substring(8);
 document.querySelector('.addfile').dataset.folderbtn = foldername;
+const queue = new Queue();
 
 window.onload = function() {
     axios({
@@ -35,6 +36,7 @@ window.onload = function() {
         addbtn.addEventListener('click', (add) => {
             const name = addbtn.dataset.folderbtn;
             console.log(addbtn.dataset.folderbtn);
+
             // api to open folder
             // window.location = location.protocol + '//' + location.host + '/folder/' + name;
             // axios({
