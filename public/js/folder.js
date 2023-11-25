@@ -2,7 +2,6 @@ const folderuuid = window.location.pathname.substring(8);
 document.querySelector('.addfile').dataset.folderbtn = folderuuid;
 const queue = new Queue();
 
-
 window.onload = function() {
     axios({
         method: 'get',
@@ -20,10 +19,11 @@ window.onload = function() {
         });
 
         let folderobj;
-        while(queue.size() != 0){
+        while (queue.size() != 0) {
+            console.log("came to queue");
             const obj = queue.peek();
-            if(obj.type === 'folder'){
-                if(obj.Fuuid === folderuuid){
+            if (obj.type === 'folder') {
+                if (obj.Fuuid === folderuuid) {
                     folderobj = obj;
                     queue.clear();
                     break;
@@ -64,7 +64,7 @@ window.onload = function() {
             eachfolder.addEventListener('click', (arrow) => {
                 const uuid = eachfolder.dataset.folder;
                 console.log('folder ' + uuid);
-                
+
                 // api to open folder
                 window.location = location.protocol + '//' + location.host + '/folder/' + uuid;
                 // axios({
