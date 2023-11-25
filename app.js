@@ -69,8 +69,6 @@ app.post('/api/user/newfolder', auth, async(req, res) => {
         res.redirect('/login');
         return;
     }
-    // const fname = req.body.folderName;
-    // const folobj = [{ folname: req.body.folderName }, { uuid: req.body.uuid }, { "kind": "folder" }]
     try {
         const user = await User.findOneAndUpdate({ name: req.user.name }, { $push: { files: { Fname: req.body.folderName, Fuuid: req.body.uuid, Ffiles: [], type: 'folder' } } });
         console.log("folder created")

@@ -26,7 +26,7 @@ window.onload = function() {
                 const template = document.querySelector('template[data-template="folderlist"]');
                 const clone = template.content.cloneNode(true);
                 clone.querySelector('.fold-name').innerHTML = file.Fname;
-                clone.querySelector('.fold-link').dataset.folder = file.Fname;
+                clone.querySelector('.fold-link').dataset.folder = file.Fuuid;
                 // clone.querySelector('fold-size').innerHTML = 0;
                 document.querySelector('#aList').appendChild(clone);
             }
@@ -34,10 +34,10 @@ window.onload = function() {
         const fold = document.querySelectorAll('.fold-link');
         fold.forEach(eachfolder => {
             eachfolder.addEventListener('click', (arrow) => {
-                const name = eachfolder.dataset.folder;
-                console.log(eachfolder.dataset.folder);
+                const uuid = eachfolder.dataset.folder;
+                console.log('folder ' + uuid);
                 // api to open folder
-                window.location = location.protocol + '//' + location.host + '/folder/' + name;
+                window.location = location.protocol + '//' + location.host + '/folder/' + uuid;
                 // axios({
                 //     method: 'get',
                 //     // params: { 'name': name },

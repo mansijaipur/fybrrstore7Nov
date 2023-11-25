@@ -1,5 +1,5 @@
-const foldername = window.location.pathname.substring(8);
-document.querySelector('.addfile').dataset.folderbtn = foldername;
+const folderuuid = window.location.pathname.substring(8);
+document.querySelector('.addfile').dataset.folderbtn = folderuuid;
 const queue = new Queue();
 
 window.onload = function() {
@@ -8,7 +8,7 @@ window.onload = function() {
         url: location.protocol + '//' + location.host + '/api/user/data',
     }).then((res) => {
         console.log(res.data);
-        document.querySelector('.folder-name').innerHTML = foldername;
+        // document.querySelector('.folder-name').innerHTML = folderuuid;
         files = res.data.files;
         // sort in descending order of last modified
         files.sort((a, b) => {
@@ -16,7 +16,7 @@ window.onload = function() {
         });
         files.forEach(file => {
 
-            if (file.Fname === foldername) {
+            if (file.Fuuid === folderuuid) {
                 const fileArr = file.Ffiles;
                 console.log("came to folder subtree" + fileArr)
                 fileArr.forEach(file => {
@@ -34,8 +34,8 @@ window.onload = function() {
         });
         const addbtn = document.querySelector('.addfile');
         addbtn.addEventListener('click', (add) => {
-            const name = addbtn.dataset.folderbtn;
-            console.log(addbtn.dataset.folderbtn);
+            const uuid = addbtn.dataset.folderbtn;
+            console.log('folder ' + uuid);
 
             // api to open folder
             // window.location = location.protocol + '//' + location.host + '/folder/' + name;
