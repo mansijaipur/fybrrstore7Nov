@@ -123,7 +123,7 @@ function createFolder() {
     axios({
         method: "post",
         url: location.protocol + '//' + location.host + '/api/user/newfolder',
-        data: { folderName, uuid }
+        data: { folderName, uuid , type : "root"}
     }).then(() => {
         document.querySelector('.btn-close').click();
         // reload page

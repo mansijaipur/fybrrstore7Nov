@@ -19,7 +19,7 @@ window.onload = function() {
             queue.enqueue(file);
         });
 
-        let folderobj;
+        // let folderobj;
         while (queue.size() != 0) {
             console.log("came to queue");
             const obj = queue.peek();
@@ -97,6 +97,67 @@ window.onload = function() {
             // })
         })
 
+    })
+}
+
+function forceDown(url, filename) {
+    fetch(url).then(function(t) {
+        return t.blob().then((b) => {
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(b);
+            a.setAttribute("download", filename);
+            a.click();
+        });
+    });
+}
+
+function convertToReadable(size) {
+    if (size < 1024) {
+        return size + ' B';
+    } else if (size < 1024 * 1024) {
+        return (size / 1024).toFixed(0) + ' KB';
+    } else if (size < 1024 * 1024 * 1024) {
+        return (size / (1024 * 1024)).toFixed(0) + ' MB';
+    } else {
+        return (size / (1024 * 1024 * 1024)).toFixed(0) + ' GB';
+    }
+}
+
+function createFolder() {
+    console.log("Creating folder")
+    const folderName = document.querySelector('.new-folder-name').value;
+    console.log(folderName);
+    
+    if (!folderName.trim()) {
+        // If folderName is empty or contains only whitespace
+        alert('Folder name cannot be empty. Please enter a valid folder name.');
+    } else {
+        // Folder name is not empty, you can proceed with your logic here
+        // For example, you might want to perform some actions with the non-empty folderName
+        console.log('Folder name:', folderName);
+    }
+    
+    // create uuid for folder
+    if (!folderName.trim()) {
+        // If folderName is empty or contains only whitespace
+        alert('Folder name cannot be empty. Please enter a valid folder name.');
+    } else {
+        // Folder name is not empty, you can proceed with your logic here
+        // For example, you might want to perform some actions with the non-empty folderName
+        console.log('Folder name:', folderName);
+    }
+
+    const uuid = uuidv4();
+    console.log(uuid, folderName);
+
+    axios({
+        method: "post",
+        url: location.protocol + '//' + location.host + '/api/user/newfolder',
+        data: { folderName, uuid , type : "folder", rootF: folderuuid}
+    }).then(() => {
+        document.querySelector('.btn-close').click();
+        // reload page
+        window.location.reload();
     })
 }
 

@@ -27,7 +27,7 @@ const server = http.createServer(app);
 connectDB();
 
 const { auth } = require('./src/middleware/auth')
-const { bfs } = require('./src/utilities/bfs')
+const { addFile, addFolder } = require('./src/utilities/bfs')
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./src/controller/auth_controller');
 
 app.post('/api/user/register', RegisterUser);
@@ -71,9 +71,18 @@ app.post('/api/user/newfolder', auth, async(req, res) => {
         return;
     }
     try {
-        const user = await User.findOneAndUpdate({ name: req.user.name }, { $push: { files: { Fname: req.body.folderName, Fuuid: req.body.uuid, Ffiles: [], type: 'folder' } } });
+        if(req.body.type === "root"){
+            const user = await User.findOneAndUpdate({ name: req.user.name }, { $push: { files: { Fname: req.body.folderName, Fuuid: req.body.uuid, Ffiles: [], type: 'folder' } } });
+            res.json(user);
+        }
+        else{
+            const user = await User.findOne({ name: req.user.name }, '-password');
+            const foltree = addFolder(req.body.folderName, req.body.uuid, user.files, req.body.rootF)
+            const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $set: { files: foltree } });
+            res.json(agnuser);
+        }
         console.log("folder created")
-        res.json(user);
+        
     } catch (error) {
         console.log(error);
     }
@@ -87,11 +96,13 @@ app.post('/api/user/addtoFolder', auth, async(req, res) => {
     console.log(req.body.uuid);
     try{
         const user = await User.findOne({ name: req.user.name }, '-password');
-        const folobj = bfs(req.body.uuid, user.files);
-
-        // const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $push: { : req.body.file } });
-        console.log(folArr);
-        res.json(folArr);
+        console.log(user.files);
+        const foltree = addFile(req.body.uuid, user.files, req.body.file);
+        console.log(foltree);
+        // const folArr = folobj.Ffiles;
+        const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $set: { files: foltree } });
+        // console.log(folArr);
+        res.json(agnuser);
     }catch (error){
         console.log(error);
     }
