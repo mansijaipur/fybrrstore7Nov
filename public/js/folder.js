@@ -1,7 +1,7 @@
 const folderuuid = window.location.pathname.substring(8);
 document.querySelector('.addfile').dataset.folderbtn = folderuuid;
 const queue = new Queue();
-
+let folderobj;
 
 window.onload = function() {
     axios({
@@ -19,7 +19,7 @@ window.onload = function() {
             queue.enqueue(file);
         });
 
-        let folderobj;
+
         while(queue.size() != 0){
             const obj = queue.peek();
             if(obj.type === 'folder'){
@@ -32,6 +32,7 @@ window.onload = function() {
                     queue.enqueue(ele);
                 });
             }
+            queue.dequeue(queue.peek());
         }
         document.querySelector('.folder-name').innerHTML = folderobj.Fname;
 
@@ -94,5 +95,27 @@ window.onload = function() {
             //     console.log('Folder opened');
             // })
         })
+
     })
+}
+
+async function upload() {
+    document.querySelector('.spinner').style.display = 'inline-block';
+    let fileObject = await fstore.sendFilesToWeb3Storage(); // fileObject = {cid: "", name: ""...}
+    const uuid = folderobj.Fuuid;
+
+    console.log(fileObject);
+    axios({
+        method: 'post',
+        url: location.protocol + '//' + location.host + '/api/user/addtoFolder',
+        data: { file: fileObject, uuid: uuid }
+    }).then((res) => {
+        console.log(res);
+        console.log("uploaded successfully");
+        document.querySelector('.spinner').style.display = 'none';
+        // close modal
+        document.querySelector('.btn-close').click();
+        // reload page
+        // window.location.reload();
+    });
 }

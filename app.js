@@ -27,6 +27,7 @@ const server = http.createServer(app);
 connectDB();
 
 const { auth } = require('./src/middleware/auth')
+const { bfs } = require('./src/utilities/bfs')
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./src/controller/auth_controller');
 
 app.post('/api/user/register', RegisterUser);
@@ -76,6 +77,26 @@ app.post('/api/user/newfolder', auth, async(req, res) => {
     } catch (error) {
         console.log(error);
     }
+})
+
+app.post('/api/user/addtoFolder', auth, async(req, res) => {
+    if (!req.isAuth) {
+        res.redirect('/login');
+        return;
+    }
+    console.log(req.body.uuid);
+    try{
+        const user = await User.findOne({ name: req.user.name }, '-password');
+        const folobj = bfs(req.body.uuid, user.files);
+
+        // const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $push: { : req.body.file } });
+        console.log(folArr);
+        res.json(folArr);
+    }catch (error){
+        console.log(error);
+    }
+    
+    return;
 })
 
 app.get('/login', (req, res) => {
