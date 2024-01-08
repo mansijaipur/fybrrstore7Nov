@@ -71,18 +71,17 @@ app.post('/api/user/newfolder', auth, async(req, res) => {
         return;
     }
     try {
-        if(req.body.type === "root"){
+        if (req.body.type === "root") {
             const user = await User.findOneAndUpdate({ name: req.user.name }, { $push: { files: { Fname: req.body.folderName, Fuuid: req.body.uuid, Ffiles: [], type: 'folder' } } });
             res.json(user);
-        }
-        else{
+        } else {
             const user = await User.findOne({ name: req.user.name }, '-password');
             const foltree = addFolder(req.body.folderName, req.body.uuid, user.files, req.body.rootF)
             const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $set: { files: foltree } });
             res.json(agnuser);
         }
         console.log("folder created")
-        
+
     } catch (error) {
         console.log(error);
     }
@@ -94,7 +93,7 @@ app.post('/api/user/addtoFolder', auth, async(req, res) => {
         return;
     }
     console.log(req.body.uuid);
-    try{
+    try {
         const user = await User.findOne({ name: req.user.name }, '-password');
         console.log(user.files);
         const foltree = addFile(req.body.uuid, user.files, req.body.file);
@@ -103,12 +102,19 @@ app.post('/api/user/addtoFolder', auth, async(req, res) => {
         const agnuser = await User.findOneAndUpdate({ name: req.user.name }, { $set: { files: foltree } });
         // console.log(folArr);
         res.json(agnuser);
-    }catch (error){
+    } catch (error) {
         console.log(error);
     }
-    
     return;
 })
+
+// app.post('/api/user/deletefile/:cid', auth, async(req, res) => {
+//     if (!req.isAuth) {
+//         res.redirect('/login');
+//         return;
+//     }
+
+// })
 
 app.get('/login', (req, res) => {
     res.sendFile(__dirname + '/public/views/login2.html');

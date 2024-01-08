@@ -44,9 +44,9 @@ window.onload = function() {
                 const clone = template.content.cloneNode(true);
                 clone.querySelector('.file-name').innerHTML = file.name;
                 clone.querySelector('.file-size').innerHTML = convertToReadable(file.size);
-                clone.querySelector('#filelink').href = `https://dweb.link/ipfs/${file.cid}`;
+                clone.querySelector('#filelink').href = `https://ipfs.io/ipfs/${file.cid}`;
                 clone.querySelector('#downloadFile').addEventListener('click', () => {
-                    forceDown(`https://dweb.link/ipfs/${file.cid}`, file.name);
+                    forceDown(`https://ipfs.io/ipfs/${file.cid}`, file.name);
                 });
                 document.querySelector('#aList').appendChild(clone);
             } else {
@@ -127,7 +127,7 @@ function createFolder() {
     console.log("Creating folder")
     const folderName = document.querySelector('.new-folder-name').value;
     console.log(folderName);
-    
+
     if (!folderName.trim()) {
         // If folderName is empty or contains only whitespace
         alert('Folder name cannot be empty. Please enter a valid folder name.');
@@ -136,7 +136,7 @@ function createFolder() {
         // For example, you might want to perform some actions with the non-empty folderName
         console.log('Folder name:', folderName);
     }
-    
+
     // create uuid for folder
     if (!folderName.trim()) {
         // If folderName is empty or contains only whitespace
@@ -153,7 +153,7 @@ function createFolder() {
     axios({
         method: "post",
         url: location.protocol + '//' + location.host + '/api/user/newfolder',
-        data: { folderName, uuid , type : "folder", rootF: folderuuid}
+        data: { folderName, uuid, type: "folder", rootF: folderuuid }
     }).then(() => {
         document.querySelector('.btn-close').click();
         // reload page
@@ -178,6 +178,6 @@ async function upload() {
         // close modal
         document.querySelector('.btn-close').click();
         // reload page
-        // window.location.reload();
+        window.location.reload();
     });
 }
